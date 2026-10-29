@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Raio-X da Juventude | Dados e Impacto Social</title>
+
+  <meta name="description"
+        content="Projeto de análise das condições socioeconômicas e educacionais da juventude.">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --primary: #087f8c;
+      --secondary: #12a4a6;
+      --background: #f3f7fa;
+      --surface: #ffffff;
+      --text: #20303c;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #075b68, #10a5a4);
+      color: white;
+      padding: 55px 7% 65px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 65px;
+    }
+
+    .logo {
+      font-size: 1.15rem;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 0.92rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      max-width: 850px;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 30px;
+      padding: 6px 13px;
+      font-size: 0.8rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.12;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      font-size: 1.08rem;
+      color: #e5ffff;
+    }
+
+    .hero-button {
+      display: inline-block;
+      margin-top: 25px;
+      background: white;
+      color: #075b68;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 35px 22px 65px;
+    }
+
+    section {
+      margin-bottom: 55px;
+      scroll-margin-top: 20px;
+    }
+
+    .section-heading {
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .section-heading p,
+    .muted {
+      color: var(--muted);
+    }
+
+    .notice {
+      padding: 16px 18px;
+      background: #fff8e6;
+      border: 1px solid #f1d99b;
+      border-radius: 10px;
+      color: #704c08;
+      margin-bottom: 25px;
+      font-size: 0.92rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(30, 50, 70, 0.035);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 10px 0 5px;
+    }
+
+    .metric-description {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .chart-card h3 {
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 290px;
+      width: 100%;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .pillar-number {
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      justify-content: center;
+      align-items: center;
+      background: #d9f3f1;
+      color: #076873;
+      font-weight: bold;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .pillar h3 {
+      margin-bottom: 12px;
+    }
+
+    .pillar ul {
+      padding-left: 20px;
+      margin-top: 12px;
+      color: var(--muted);
+    }
+
+    .pillar li {
+      margin-bottom: 7px;
+    }
+
+    .methodology {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .methodology h3 {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      background: #102f3a;
+      color: #e5f2f5;
+      text-align: center;
+      padding: 32px 20px;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      margin: 5px;
+    }
+
+    @media (max-width: 850px) {
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pillars {
+        grid-template-columns: 1fr;
+      }
+
+      .charts,
+      .methodology {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        margin-bottom: 40px;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 30px 22px 45px;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 28px 15px 45px;
+      }
+
+      .chart-container {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">Raio-X da Juventude</div>
+
+      <div>
+        <a href="#indicadores">Indicadores</a>
+        <a href="#graficos">Gráficos</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#metodologia">Metodologia</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <span class="tag">Ciência de Dados • Educação • Impacto Social</span>
+
+      <h1>Compreender a juventude para transformar o futuro.</h1>
+
+      <p>
+        Uma iniciativa de análise de dados para investigar condições
+        socioeconômicas, oportunidades educacionais e qualidade de vida,
+        transformando informações em propostas de impacto social.
+      </p>
+
+      <a class="hero-button" href="#indicadores">
+        Explorar os indicadores ↓
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <div class="notice">
+      <strong>Importante:</strong> este dashboard utiliza dados
+      demonstrativos fictícios. Os números não representam estimativas
+      reais da juventude brasileira. Substitua-os pelos resultados
+      de uma pesquisa documentada antes de divulgar conclusões.
+    </div>
+
+    <section id="indicadores">
+      <div class="section-heading">
+        <h2>Visão geral</h2>
+        <p>Indicadores selecionados para demonstrar o funcionamento do projeto.</p>
+      </div>
+
+      <div class="metrics">
+
+        <article class="card">
+          <div class="metric-label">Jovens na amostra</div>
+          <div class="metric-value" id="totalJovens">300</div>
+          <div class="metric-description">Registros demonstrativos</div>
+        </article>
+
+        <article class="card">
+          <div class="metric-label">Acesso à internet</div>
+          <div class="metric-value" id="internet">78%</div>
+          <div class="metric-description">Acesso informado no exemplo</div>
+        </article>
+
+        <article class="card">
+          <div class="metric-label">Frequência escolar</div>
+          <div class="metric-value" id="escola">82%</div>
+          <div class="metric-description">Frequência informada no exemplo</div>
+        </article>
+
+        <article class="card">
+          <div class="metric-label">Acesso ao lazer</div>
+          <div class="metric-value" id="lazer">60%</div>
+          <div class="metric-description">Acesso informado no exemplo</div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="graficos">
+      <div class="section-heading">
+        <h2>Exploração dos dados</h2>
+        <p>Visualizações demonstrativas de dimensões da vida juvenil.</p>
+      </div>
+
+      <div class="charts">
+
+        <article class="card chart-card">
+          <h3>Acesso à internet</h3>
+          <div class="chart-container">
+            <canvas id="internetChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <h3>Frequência escolar por faixa de renda</h3>
+          <div class="chart-container">
+            <canvas id="escolaChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <h3>Horas diárias de estudo</h3>
+          <div class="chart-container">
+            <canvas id="estudoChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <h3>Perspectivas de futuro</h3>
+          <div class="chart-container">
+            <canvas id="futuroChart"></canvas>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="solucoes">
+      <div class="section-heading">
+        <h2>Propostas de intervenção</h2>
+        <p>Três pilares para orientar ações sociais e educacionais.</p>
+      </div>
+
+      <div class="pillars">
+
+        <article class="card pillar">
+          <div class="pillar-number">01</div>
+          <h3>Inclusão digital</h3>
+          <p>
+            Ampliar o acesso dos jovens a recursos tecnológicos
+            e ambientes adequados de aprendizagem.
+          </p>
+          <ul>
+            <li>Espaços comunitários de estudo.</li>
+            <li>Acesso à internet e computadores.</li>
+            <li>Disponibilização de materiais didáticos.</li>
+          </ul>
+        </article>
+
+        <article class="card pillar">
+          <div class="pillar-number">02</div>
+          <h3>Apoio socioemocional</h3>
+          <p>
+            Promover acolhimento, acompanhamento escolar e
+            fortalecimento dos vínculos educacionais.
+          </p>
+          <ul>
+            <li>Programas de mentoria.</li>
+            <li>Acompanhamento da frequência escolar.</li>
+            <li>Articulação com profissionais qualificados.</li>
+          </ul>
+        </article>
+
+        <article class="card pillar">
+          <div class="pillar-number">03</div>
+          <h3>Preparação para o futuro</h3>
+          <p>
+            Desenvolver competências que ampliem as oportunidades
+            educacionais e profissionais dos jovens.
+          </p>
+          <ul>
+            <li>Introdução à programação.</li>
+            <li>Capacitação em análise de dados.</li>
+            <li>Orientação profissional e formação técnica.</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="metodologia">
+      <div class="section-heading">
+        <h2>Metodologia do projeto</h2>
+        <p>Como os dados serão transformados em informações úteis.</p>
+      </div>
+
+      <div class="methodology">
+
+        <article class="card">
+          <h3>1. Coleta de dados</h3>
+          <p class="muted">
+            Utilização de bases públicas do IBGE e do INEP e,
+            quando apropriado, questionários com procedimentos
+            éticos e proteção dos participantes.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>2. Tratamento</h3>
+          <p class="muted">
+            Limpeza, padronização, verificação de duplicatas,
+            tratamento de valores ausentes e documentação das variáveis.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>3. Análise exploratória</h3>
+          <p class="muted">
+            Cálculo de indicadores, comparação entre grupos e
+            investigação de associações entre fatores sociais e educacionais.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>4. Comunicação dos resultados</h3>
+          <p class="muted">
+            Apresentação de gráficos, limitações, conclusões e
+            propostas de intervenção baseadas nas evidências encontradas.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p><strong>Raio-X da Juventude</strong></p>
+    <p>Dados, educação e oportunidades para transformar realidades.</p>
+    <p>Projeto demonstrativo de Ciência de Dados e impacto social.</p>
+  </footer>
+
+  <script>
+    // DADOS FICTÍCIOS: substituir pelos resultados da análise em Python.
+
+    Chart.defaults.font.family = "Arial, sans-serif";
+    Chart.defaults.color = "#64748b";
+
+    const cores = {
+      principal: "#087f8c",
+      secundaria: "#12a4a6",
+      laranja: "#e8a34d",
+      vermelho: "#dc7373",
+      cinza: "#d9e4ea"
+    };
+
+    // 1. Acesso à internet
+    new Chart(document.getElementById("internetChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Com acesso", "Sem acesso"],
+        datasets: [{
+          data: [78, 22],
+          backgroundColor: [cores.principal, cores.laranja],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+
+    // 2. Frequência escolar por faixa de renda
+    new Chart(document.getElementById("escolaChart"), {
+      type: "bar",
+      data: {
+        labels: [
+          "Até 1 salário",
+          "1 a 2 salários",
+          "2 a 3 salários",
+          "Acima de 3"
+        ],
+        datasets: [{
+          label: "Frequência escolar (%)",
+          data: [78, 82, 85, 88],
+          backgroundColor: cores.secundaria,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              callback: value => value + "%"
+            }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // 3. Distribuição das horas de estudo
+    new Chart(document.getElementById("estudoChart"), {
+      type: "bar",
+      data: {
+        labels: ["0 h", "1 h", "2 h", "3 h", "4 h", "5 h", "6 h"],
+        datasets: [{
+          label: "Número de jovens",
+          data: [40, 42, 45, 44, 43, 44, 42],
+          backgroundColor: cores.principal,
+          borderRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // 4. Perspectivas de futuro
+    new Chart(document.getElementById("futuroChart"), {
+      type: "pie",
+      data: {
+        labels: ["Otimista", "Neutra", "Pessimista"],
+        datasets: [{
+          data: [55, 30, 15],
+          backgroundColor: [
+            cores.principal,
+            cores.laranja,
+            cores.vermelho
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
